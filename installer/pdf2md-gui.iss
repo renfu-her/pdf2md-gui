@@ -5,7 +5,7 @@
 
 #define MyAppName "PDF 轉 Markdown"
 #define MyAppExe "pdf2md-gui.exe"
-#define MyAppVersion "0.9.0"
+#define MyAppVersion "0.10.0"
 #define MyAppPublisher "pdf2md-gui"
 
 [Setup]

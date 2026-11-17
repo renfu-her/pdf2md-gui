@@ -2602,7 +2602,7 @@ dependencies = [
 
 [[package]]
 name = "pdf2md-gui"
-version = "0.9.0"
+version = "0.10.0"
 dependencies = [
  "pdf-inspector",
  "rfd",

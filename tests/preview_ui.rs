@@ -12,6 +12,16 @@ fn ui_file(name: &str) -> String {
         .unwrap_or_else(|_| panic!("ui/{name} must exist"))
 }
 
+fn rule_block<'a>(css: &'a str, selector: &str) -> &'a str {
+    let pos = css
+        .find(selector)
+        .unwrap_or_else(|| panic!("{selector} must be styled in styles.css"));
+    let rest = &css[pos..];
+    let open = rest.find('{').expect("rule block must open");
+    let close = rest.find('}').expect("rule block must close");
+    &rest[open..close]
+}
+
 fn preview_section(html: &str) -> &str {
     let start = html
         .find("id=\"tab-preview\"")
@@ -55,12 +65,24 @@ fn preview_copy_and_save_buttons_are_prominent() {
         css.contains(".preview-action") || css.contains("btnCopyMd"),
         "styles.css must style the preview actions prominently"
     );
-    assert!(
-        css.contains("background: var(--accent)")
-            || css.contains("background:var(--accent)")
-            || css.contains("background-color: var(--accent)"),
-        "prominent preview actions must use the accent background"
-    );
+    // Brand gradient: warm orange -> deep navy (see CHANGED.md).
+    // Hexes live once in `:root`; buttons reference them via variables.
+    let root = rule_block(&css, ":root").to_lowercase();
+    for (var, hex) in [("--action-from", "#f2904f"), ("--action-to", "#3b4270")] {
+        assert!(
+            root.contains(&format!("{var}: {hex}")),
+            ":root must define {var} as {hex}"
+        );
+    }
+    for selector in ["button.preview-action", "button.primary"] {
+        let block = rule_block(&css, selector).to_lowercase();
+        assert!(
+            block.contains("linear-gradient")
+                && block.contains("var(--action-from)")
+                && block.contains("var(--action-to)"),
+            "{selector} must render the brand gradient (#F2904F -> #3B4270)"
+        );
+    }
 }
 
 #[test]
