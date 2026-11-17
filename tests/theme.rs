@@ -154,9 +154,17 @@ fn each_scheme_theme_combo_uses_its_roles() {
 #[test]
 fn scheme_picker_exists_and_choice_is_persisted() {
     let html = ui_file("index.html");
+    assert!(
+        html.contains("<select") && html.contains("id=\"schemeSelect\""),
+        "picker must be a select dropdown next to the theme buttons"
+    );
+    assert!(
+        !html.contains("data-scheme-choice"),
+        "the old button-row picker must be gone"
+    );
     for scheme in SCHEMES {
         assert!(
-            html.contains(&format!("data-scheme-choice=\"{scheme}\"")),
+            html.contains(&format!("value=\"{scheme}\"")),
             "picker must offer the {scheme} scheme"
         );
     }

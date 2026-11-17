@@ -10,6 +10,13 @@
 <header class="topbar">
   <div class="title">PDF 轉 Markdown <span id="appVersion" class="version"></span></div>
   <div class="theme-switch" role="group" aria-label="主題">
+    <select id="schemeSelect" aria-label="配色">
+      <option value="sunset">都會日落</option>
+      <option value="harvest">秋收</option>
+      <option value="ember">午夜陽光</option>
+      <option value="desert">沙漠日落</option>
+      <option value="sky">午夜星空</option>
+    </select>
     <button type="button" data-theme-choice="light">淺色</button>
     <button type="button" data-theme-choice="dark">深色</button>
     <button type="button" data-theme-choice="auto" class="active">自動</button>
@@ -21,15 +28,6 @@
   <button type="button" role="tab" data-tab="preview">預覽</button>
   <button type="button" role="tab" data-tab="about">關於</button>
 </nav>
-
-<div class="schemebar" role="group" aria-label="配色">
-  <span>配色：</span>
-  <button type="button" data-scheme-choice="sunset" class="active">都會日落</button>
-  <button type="button" data-scheme-choice="harvest">秋收</button>
-  <button type="button" data-scheme-choice="ember">午夜陽光</button>
-  <button type="button" data-scheme-choice="desert">沙漠日落</button>
-  <button type="button" data-scheme-choice="sky">午夜星空</button>
-</div>
 
 <main>
   <section id="tab-upload" role="tabpanel">

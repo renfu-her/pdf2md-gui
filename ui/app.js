@@ -273,8 +273,9 @@ function setSchemeChoice(scheme) {
   state.scheme = scheme;
   document.documentElement.setAttribute('data-scheme', scheme);
   store('pdf2md.scheme', scheme);
-  for (const button of document.querySelectorAll('[data-scheme-choice]')) {
-    button.classList.toggle('active', button.dataset.schemeChoice === scheme);
+  const picker = document.getElementById('schemeSelect');
+  if (picker) {
+    picker.value = scheme;
   }
 }
 
@@ -285,9 +286,9 @@ function bindEvents() {
   for (const button of document.querySelectorAll('.theme-switch button')) {
     button.addEventListener('click', () => setThemeChoice(button.dataset.themeChoice));
   }
-  for (const button of document.querySelectorAll('[data-scheme-choice]')) {
-    button.addEventListener('click', () => setSchemeChoice(button.dataset.schemeChoice));
-  }
+  $('schemeSelect').addEventListener('change', (event) => {
+    setSchemeChoice(event.target.value);
+  });
   window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', applyTheme);
   $('dropzone').addEventListener('click', pickPdf);
   $('btnConvert').addEventListener('click', convert);

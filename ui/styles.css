@@ -198,8 +198,13 @@ body {
 .title { font-size: 15px; font-weight: 700; }
 .version { color: var(--muted); font-weight: 400; font-size: 12px; }
 
+.theme-switch {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
 .theme-switch button,
-.schemebar button,
 .tabs button {
   background: transparent;
   color: var(--muted);
@@ -211,21 +216,20 @@ body {
 }
 
 .theme-switch button.active,
-.schemebar button.active,
 .tabs button.active {
   color: var(--accent-fg);
   background: var(--accent);
   border-color: var(--accent);
 }
 
-.schemebar {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 6px;
-  padding: 8px 12px 0;
+.theme-switch select {
+  background: transparent;
   color: var(--muted);
-  font-size: 12px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 3px 6px;
+  cursor: pointer;
+  font: inherit;
 }
 
 .tabs {
