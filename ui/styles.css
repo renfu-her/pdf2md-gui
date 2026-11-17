@@ -1,71 +1,71 @@
-/* Brand series: colorate RGB linear blend F2904F -> 3B4270.
-   Steps: #F2904F #D38354 #B5765A #96695F #785C65 #594F6A #3B4270.
+/* Brand series: bittersweet shades (colordrop).
+   Steps: #FFDAD6 #FFB1A9 #FE887B #FE5F4D #FE3620 #F41901 #C61501 #981001 #6B0B01 #3D0600.
    Every chromatic role below comes from these steps; only white/black
    (page neutral, button text, text shadow) stand outside the series. */
 :root {
   --bg: #ffffff;
-  --fg: #3B4270;
-  --muted: #785C65;
-  --border: #D38354;
-  --accent: #96695F;
+  --fg: #3D0600;
+  --muted: #981001;
+  --border: #FFB1A9;
+  --accent: #F41901;
   --accent-fg: #ffffff;
-  --action-from: #F2904F;
-  --action-to: #3B4270;
+  --action: #F41901;
+  --action-pressed: #C61501;
   --action-fg: #ffffff;
-  --code-bg: rgba(211, 131, 84, 0.14);
-  --notice-bg: rgba(242, 144, 79, 0.18);
-  --notice-fg: #3B4270;
-  --notice-border: #D38354;
+  --code-bg: rgba(254, 136, 123, 0.16);
+  --notice-bg: rgba(254, 54, 32, 0.12);
+  --notice-fg: #6B0B01;
+  --notice-border: #FE887B;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #3B4270;
-    --fg: #ffffff;
-    --muted: #D38354;
-    --border: #594F6A;
-    --accent: #F2904F;
-    --accent-fg: #3B4270;
-    --action-from: #F2904F;
-    --action-to: #3B4270;
-  --action-fg: #ffffff;
-    --code-bg: rgba(242, 144, 79, 0.14);
-    --notice-bg: rgba(242, 144, 79, 0.16);
-    --notice-fg: #F2904F;
-    --notice-border: #594F6A;
+    --bg: #3D0600;
+    --fg: #FFDAD6;
+    --muted: #FE887B;
+    --border: #6B0B01;
+    --accent: #FE887B;
+    --accent-fg: #3D0600;
+    --action: #F41901;
+    --action-pressed: #C61501;
+    --action-fg: #ffffff;
+    --code-bg: rgba(254, 95, 77, 0.16);
+    --notice-bg: rgba(254, 54, 32, 0.18);
+    --notice-fg: #FFB1A9;
+    --notice-border: #981001;
   }
 }
 
 :root[data-theme="light"] {
   --bg: #ffffff;
-  --fg: #3B4270;
-  --muted: #785C65;
-  --border: #D38354;
-  --accent: #96695F;
+  --fg: #3D0600;
+  --muted: #981001;
+  --border: #FFB1A9;
+  --accent: #F41901;
   --accent-fg: #ffffff;
-  --action-from: #F2904F;
-  --action-to: #3B4270;
+  --action: #F41901;
+  --action-pressed: #C61501;
   --action-fg: #ffffff;
-  --code-bg: rgba(211, 131, 84, 0.14);
-  --notice-bg: rgba(242, 144, 79, 0.18);
-  --notice-fg: #3B4270;
-  --notice-border: #D38354;
+  --code-bg: rgba(254, 136, 123, 0.16);
+  --notice-bg: rgba(254, 54, 32, 0.12);
+  --notice-fg: #6B0B01;
+  --notice-border: #FE887B;
 }
 
 :root[data-theme="dark"] {
-  --bg: #3B4270;
-  --fg: #ffffff;
-  --muted: #D38354;
-  --border: #594F6A;
-  --accent: #F2904F;
-  --accent-fg: #3B4270;
-  --action-from: #F2904F;
-  --action-to: #3B4270;
+  --bg: #3D0600;
+  --fg: #FFDAD6;
+  --muted: #FE887B;
+  --border: #6B0B01;
+  --accent: #FE887B;
+  --accent-fg: #3D0600;
+  --action: #F41901;
+  --action-pressed: #C61501;
   --action-fg: #ffffff;
-  --code-bg: rgba(242, 144, 79, 0.14);
-  --notice-bg: rgba(242, 144, 79, 0.16);
-  --notice-fg: #F2904F;
-  --notice-border: #594F6A;
+  --code-bg: rgba(254, 95, 77, 0.16);
+  --notice-bg: rgba(254, 54, 32, 0.18);
+  --notice-fg: #FFB1A9;
+  --notice-border: #981001;
 }
 
 * { box-sizing: border-box; }
@@ -187,12 +187,18 @@ button {
 
 button.primary {
   color: var(--action-fg);
-  background: linear-gradient(135deg, var(--action-from), var(--action-to));
-  border-color: var(--action-from);
+  background: var(--action);
+  border-color: var(--action-pressed);
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
   width: 100%;
   padding: 7px;
   margin-top: 8px;
+}
+
+button.primary:active,
+button.preview-action:active {
+  background: var(--action-pressed);
+  border-color: var(--action-pressed);
 }
 
 button:disabled { opacity: 0.45; cursor: default; }
@@ -250,8 +256,8 @@ button:disabled { opacity: 0.45; cursor: default; }
 
 button.preview-action {
   color: var(--action-fg);
-  background: linear-gradient(135deg, var(--action-from), var(--action-to));
-  border-color: var(--action-from);
+  background: var(--action);
+  border-color: var(--action-pressed);
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
   font-weight: 700;
   font-size: 14px;

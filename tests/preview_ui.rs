@@ -65,24 +65,31 @@ fn preview_copy_and_save_buttons_are_prominent() {
         css.contains(".preview-action") || css.contains("btnCopyMd"),
         "styles.css must style the preview actions prominently"
     );
-    // Brand gradient: warm orange -> deep navy (see CHANGED.md).
+    // Brand action: one solid color, darker while pressed (see CHANGED.md).
     // Hexes live once in `:root`; buttons reference them via variables.
     let root = rule_block(&css, ":root").to_lowercase();
-    for (var, hex) in [("--action-from", "#f2904f"), ("--action-to", "#3b4270")] {
+    for (var, hex) in [("--action", "#f41901"), ("--action-pressed", "#c61501")] {
         assert!(
             root.contains(&format!("{var}: {hex}")),
             ":root must define {var} as {hex}"
         );
     }
-    for selector in ["button.preview-action", "button.primary"] {
+    for selector in ["button.preview-action {", "button.primary {"] {
         let block = rule_block(&css, selector).to_lowercase();
         assert!(
-            block.contains("linear-gradient")
-                && block.contains("var(--action-from)")
-                && block.contains("var(--action-to)"),
-            "{selector} must render the brand gradient (#F2904F -> #3B4270)"
+            block.contains("background: var(--action)"),
+            "{selector} must use the solid brand color"
+        );
+        assert!(
+            !block.contains("linear-gradient"),
+            "{selector} must be solid, not gradient"
         );
     }
+    let pressed = rule_block(&css, ":active").to_lowercase();
+    assert!(
+        pressed.contains("var(--action-pressed)"),
+        "pressed buttons must use the darker brand step"
+    );
 }
 
 #[test]

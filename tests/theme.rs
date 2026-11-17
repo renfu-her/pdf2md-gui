@@ -1,21 +1,26 @@
-//! Locks the UI theme to the colorate brand series (RGB linear blend
-//! `#F2904F -> #3B4270`): every chromatic color in `ui/styles.css` must come
-//! from the 7-step series; white/black stay allowed as neutrals.
+//! Locks the UI theme to the bittersweet series (shades from
+//! https://colordrop.io/colors/bittersweet): every chromatic color in
+//! `ui/styles.css` must come from the 10-step series; white/black stay
+//! allowed as neutrals.
 
 use std::path::PathBuf;
 
-/// RGB linear blend from https://colorate.azurewebsites.net/Gradient/F2904F_3B4270
-const SERIES_HEX: [&str; 7] = [
-    "f2904f", "d38354", "b5765a", "96695f", "785c65", "594f6a", "3b4270",
+/// Shades of bittersweet from https://colordrop.io/colors/bittersweet
+const SERIES_HEX: [&str; 10] = [
+    "ffdad6", "ffb1a9", "fe887b", "fe5f4d", "fe3620", "f41901", "c61501", "981001",
+    "6b0b01", "3d0600",
 ];
-const SERIES_RGB: [[u16; 3]; 7] = [
-    [242, 144, 79],
-    [211, 131, 84],
-    [181, 118, 90],
-    [150, 105, 95],
-    [120, 92, 101],
-    [89, 79, 106],
-    [59, 66, 112],
+const SERIES_RGB: [[u16; 3]; 10] = [
+    [255, 218, 214],
+    [255, 177, 169],
+    [254, 136, 123],
+    [254, 95, 77],
+    [254, 54, 32],
+    [244, 25, 1],
+    [198, 21, 1],
+    [152, 16, 1],
+    [107, 11, 1],
+    [61, 6, 0],
 ];
 
 fn css() -> String {
@@ -78,16 +83,31 @@ fn every_chromatic_color_comes_from_the_brand_series() {
 #[test]
 fn theme_roles_follow_the_series() {
     let css = css().to_lowercase();
-    // Light: navy text on white, warm-brown accent with white text.
-    assert!(css.contains("  --fg: #3b4270"), "light text must be navy");
+    // Light: near-black red text on white, vivid red accent with white text.
     assert!(
-        css.contains("  --accent: #96695f"),
-        "light accent must be the warm-brown series step"
+        css.contains("  --fg: #3d0600"),
+        "light text must be the darkest series step"
     );
-    // Dark: navy page, orange accent with navy text.
-    assert!(css.contains("  --bg: #3b4270"), "dark page must be navy");
     assert!(
-        css.contains("  --accent: #f2904f"),
-        "dark accent must be the orange series step"
+        css.contains("  --accent: #f41901"),
+        "light accent must be the vivid red series step"
+    );
+    // Dark: near-black red page, light red accent with dark text.
+    assert!(
+        css.contains("  --bg: #3d0600"),
+        "dark page must be the darkest series step"
+    );
+    assert!(
+        css.contains("  --accent: #fe887b"),
+        "dark accent must be a light red series step"
+    );
+    // Action buttons: one solid color plus a darker pressed state.
+    assert!(
+        css.contains("  --action: #f41901"),
+        "button normal state must be the vivid red series step"
+    );
+    assert!(
+        css.contains("  --action-pressed: #c61501"),
+        "button pressed state must be one step darker"
     );
 }
