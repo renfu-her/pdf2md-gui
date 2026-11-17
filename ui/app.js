@@ -1,10 +1,14 @@
 // pdf2md-gui frontend: vanilla JS over the Tauri IPC bridge.
 // No build step, no npm. Requires window.__TAURI__ (i.e. run inside the app).
 
+const SCHEMES = ['sunset', 'harvest', 'ember', 'desert', 'sky'];
+
 const state = {
   pdfPath: '',
   markdown: '',
   converting: false,
+  themeChoice: 'auto',
+  scheme: 'sunset',
 };
 
 function tauri() {
@@ -223,14 +227,54 @@ function switchTab(name) {
   }
 }
 
-function setThemeChoice(choice) {
-  if (choice === 'auto') {
-    document.documentElement.removeAttribute('data-theme');
-  } else {
-    document.documentElement.setAttribute('data-theme', choice);
+function resolveTheme() {
+  if (state.themeChoice === 'dark') {
+    return 'dark';
   }
+  if (state.themeChoice === 'light') {
+    return 'light';
+  }
+  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+}
+
+function applyTheme() {
+  document.documentElement.setAttribute('data-theme', resolveTheme());
+}
+
+function loadStored(key) {
+  try {
+    return localStorage.getItem(key);
+  } catch (ignored) {
+    return null;
+  }
+}
+
+function store(key, value) {
+  try {
+    localStorage.setItem(key, value);
+  } catch (ignored) {
+    // Private mode etc: choice still applies for this session.
+  }
+}
+
+function setThemeChoice(choice) {
+  state.themeChoice = choice;
+  store('pdf2md.theme', choice);
+  applyTheme();
   for (const button of document.querySelectorAll('.theme-switch button')) {
     button.classList.toggle('active', button.dataset.themeChoice === choice);
+  }
+}
+
+function setSchemeChoice(scheme) {
+  if (!SCHEMES.includes(scheme)) {
+    scheme = 'sunset';
+  }
+  state.scheme = scheme;
+  document.documentElement.setAttribute('data-scheme', scheme);
+  store('pdf2md.scheme', scheme);
+  for (const button of document.querySelectorAll('[data-scheme-choice]')) {
+    button.classList.toggle('active', button.dataset.schemeChoice === scheme);
   }
 }
 
@@ -241,6 +285,10 @@ function bindEvents() {
   for (const button of document.querySelectorAll('.theme-switch button')) {
     button.addEventListener('click', () => setThemeChoice(button.dataset.themeChoice));
   }
+  for (const button of document.querySelectorAll('[data-scheme-choice]')) {
+    button.addEventListener('click', () => setSchemeChoice(button.dataset.schemeChoice));
+  }
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', applyTheme);
   $('dropzone').addEventListener('click', pickPdf);
   $('btnConvert').addEventListener('click', convert);
   $('btnCopyCmd').addEventListener('click', async () => {
@@ -272,6 +320,9 @@ function bindEvents() {
 
 async function init() {
   bindEvents();
+  // Restore the persisted look: scheme + theme survive restarts until changed.
+  setSchemeChoice(loadStored('pdf2md.scheme') || 'sunset');
+  setThemeChoice(loadStored('pdf2md.theme') || 'auto');
   try {
     const version = await tauri().core.invoke('app_version');
     $('appVersion').textContent = 'v' + version;

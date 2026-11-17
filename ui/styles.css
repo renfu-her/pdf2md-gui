@@ -1,7 +1,9 @@
-/* Brand palette: Urban Sunset (colordrop palette 373).
-   Steps: #393939 #FF5A09 #00303F #7A9D96.
-   Every chromatic role below comes from this palette; only white/black
-   (page neutral, button text, text shadow) stand outside the palette. */
+/* Brand palettes (colordrop): Urban Sunset 373, Autumn Harvest 103,
+   Midnight Sun 365, Desert Sunset 421, Midnight Sky 111.
+   Base :root is sunset/light (the default, also the no-JS fallback);
+   every other scheme+theme combo has its own block below. Only
+   white/black stand outside the palettes (page neutral, button text,
+   text shadow). */
 :root {
   --bg: #ffffff;
   --fg: #393939;
@@ -12,47 +14,14 @@
   --action: #FF5A09;
   --action-pressed: #00303F;
   --action-fg: #ffffff;
+  --action-pressed-fg: #ffffff;
   --code-bg: rgba(122, 157, 150, 0.18);
   --notice-bg: rgba(255, 90, 9, 0.14);
   --notice-fg: #00303F;
   --notice-border: #FF5A09;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #00303F;
-    --fg: #7A9D96;
-    --muted: #FF5A09;
-    --border: #393939;
-    --accent: #7A9D96;
-    --accent-fg: #00303F;
-    --action: #FF5A09;
-    --action-pressed: #393939;
-    --action-fg: #ffffff;
-    --code-bg: rgba(255, 90, 9, 0.14);
-    --notice-bg: rgba(255, 90, 9, 0.16);
-    --notice-fg: #FF5A09;
-    --notice-border: #7A9D96;
-  }
-}
-
-:root[data-theme="light"] {
-  --bg: #ffffff;
-  --fg: #393939;
-  --muted: #00303F;
-  --border: #7A9D96;
-  --accent: #00303F;
-  --accent-fg: #ffffff;
-  --action: #FF5A09;
-  --action-pressed: #00303F;
-  --action-fg: #ffffff;
-  --code-bg: rgba(122, 157, 150, 0.18);
-  --notice-bg: rgba(255, 90, 9, 0.14);
-  --notice-fg: #00303F;
-  --notice-border: #FF5A09;
-}
-
-:root[data-theme="dark"] {
+:root[data-scheme="sunset"][data-theme="dark"] {
   --bg: #00303F;
   --fg: #7A9D96;
   --muted: #FF5A09;
@@ -62,10 +31,147 @@
   --action: #FF5A09;
   --action-pressed: #393939;
   --action-fg: #ffffff;
+  --action-pressed-fg: #ffffff;
   --code-bg: rgba(255, 90, 9, 0.14);
   --notice-bg: rgba(255, 90, 9, 0.16);
   --notice-fg: #FF5A09;
   --notice-border: #7A9D96;
+}
+
+:root[data-scheme="harvest"][data-theme="light"] {
+  --bg: #ffffff;
+  --fg: #2D2200;
+  --muted: #6D6601;
+  --border: #D99400;
+  --accent: #BF5704;
+  --accent-fg: #ffffff;
+  --action: #BF5704;
+  --action-pressed: #2D2200;
+  --action-fg: #ffffff;
+  --action-pressed-fg: #ffffff;
+  --code-bg: rgba(217, 148, 0, 0.16);
+  --notice-bg: rgba(191, 87, 4, 0.14);
+  --notice-fg: #2D2200;
+  --notice-border: #BF5704;
+}
+
+:root[data-scheme="harvest"][data-theme="dark"] {
+  --bg: #2D2200;
+  --fg: #D99400;
+  --muted: #BF5704;
+  --border: #6D6601;
+  --accent: #D99400;
+  --accent-fg: #2D2200;
+  --action: #BF5704;
+  --action-pressed: #6D6601;
+  --action-fg: #ffffff;
+  --action-pressed-fg: #ffffff;
+  --code-bg: rgba(191, 87, 4, 0.16);
+  --notice-bg: rgba(191, 87, 4, 0.18);
+  --notice-fg: #D99400;
+  --notice-border: #6D6601;
+}
+
+:root[data-scheme="ember"][data-theme="light"] {
+  --bg: #ffffff;
+  --fg: #3A4660;
+  --muted: #845007;
+  --border: #C9AF98;
+  --accent: #845007;
+  --accent-fg: #ffffff;
+  --action: #845007;
+  --action-pressed: #3A4660;
+  --action-fg: #ffffff;
+  --action-pressed-fg: #ffffff;
+  --code-bg: rgba(201, 175, 152, 0.2);
+  --notice-bg: rgba(237, 138, 99, 0.16);
+  --notice-fg: #3A4660;
+  --notice-border: #ED8A63;
+}
+
+:root[data-scheme="ember"][data-theme="dark"] {
+  --bg: #3A4660;
+  --fg: #C9AF98;
+  --muted: #ED8A63;
+  --border: #845007;
+  --accent: #C9AF98;
+  --accent-fg: #3A4660;
+  --action: #ED8A63;
+  --action-pressed: #C9AF98;
+  --action-fg: #3A4660;
+  --action-pressed-fg: #3A4660;
+  --code-bg: rgba(237, 138, 99, 0.14);
+  --notice-bg: rgba(237, 138, 99, 0.16);
+  --notice-fg: #C9AF98;
+  --notice-border: #845007;
+}
+
+:root[data-scheme="desert"][data-theme="light"] {
+  --bg: #ffffff;
+  --fg: #0F0D21;
+  --muted: #5B6044;
+  --border: #CF9B61;
+  --accent: #5B6044;
+  --accent-fg: #ffffff;
+  --action: #5B6044;
+  --action-pressed: #0F0D21;
+  --action-fg: #ffffff;
+  --action-pressed-fg: #ffffff;
+  --code-bg: rgba(207, 155, 97, 0.2);
+  --notice-bg: rgba(207, 155, 97, 0.18);
+  --notice-fg: #0F0D21;
+  --notice-border: #CF9B61;
+}
+
+:root[data-scheme="desert"][data-theme="dark"] {
+  --bg: #0F0D21;
+  --fg: #CF9B61;
+  --muted: #5B6044;
+  --border: #5B6044;
+  --accent: #CF9B61;
+  --accent-fg: #0F0D21;
+  --action: #CF9B61;
+  --action-pressed: #5B6044;
+  --action-fg: #0F0D21;
+  --action-pressed-fg: #ffffff;
+  --code-bg: rgba(207, 155, 97, 0.14);
+  --notice-bg: rgba(207, 155, 97, 0.16);
+  --notice-fg: #CF9B61;
+  --notice-border: #5B6044;
+}
+
+:root[data-scheme="sky"][data-theme="light"] {
+  --bg: #ffffff;
+  --fg: #1C1E24;
+  --muted: #4D638C;
+  --border: #CFE0F9;
+  --accent: #283654;
+  --accent-fg: #ffffff;
+  --action: #4D638C;
+  --action-pressed: #1C1E24;
+  --action-fg: #ffffff;
+  --action-pressed-fg: #ffffff;
+  --code-bg: rgba(207, 224, 249, 0.3);
+  --notice-bg: rgba(77, 99, 140, 0.14);
+  --notice-fg: #1C1E24;
+  --notice-border: #4D638C;
+}
+
+:root[data-scheme="sky"][data-theme="dark"] {
+  --bg: #1C1E24;
+  --fg: #CFE0F9;
+  --muted: #4D638C;
+  --border: #283654;
+  --accent: #4D638C;
+  --accent-fg: #ffffff;
+  --action: #4D638C;
+  --action-pressed: #CFE0F9;
+  --action-fg: #ffffff;
+  --action-pressed-fg: #1C1E24;
+  --code-bg: rgba(207, 224, 249, 0.12);
+  --notice-bg: rgba(77, 99, 140, 0.25);
+  --notice-fg: #CFE0F9;
+  --notice-border: #4D638C;
 }
 
 * { box-sizing: border-box; }
@@ -93,6 +199,7 @@ body {
 .version { color: var(--muted); font-weight: 400; font-size: 12px; }
 
 .theme-switch button,
+.schemebar button,
 .tabs button {
   background: transparent;
   color: var(--muted);
@@ -104,10 +211,21 @@ body {
 }
 
 .theme-switch button.active,
+.schemebar button.active,
 .tabs button.active {
   color: var(--accent-fg);
   background: var(--accent);
   border-color: var(--accent);
+}
+
+.schemebar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px 0;
+  color: var(--muted);
+  font-size: 12px;
 }
 
 .tabs {
@@ -199,6 +317,7 @@ button.primary:active,
 button.preview-action:active {
   background: var(--action-pressed);
   border-color: var(--action-pressed);
+  color: var(--action-pressed-fg);
 }
 
 button:disabled { opacity: 0.45; cursor: default; }

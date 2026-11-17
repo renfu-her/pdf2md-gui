@@ -24,6 +24,7 @@ Windows 桌面軟體：把 PDF 轉成 Markdown。底層是 [pdf-inspector](https
 - 對等 CLI 指令即時預覽，可複製（密碼顯示為 `****`）。
 - 轉換在背景執行緒跑，界面不凍結；結果含偵測報告與 Markdown 預覽，可複製全文或存成 `.md`。
 - 主題：淺色／深色／跟隨系統（預設跟隨系統）。
+- 配色：都會日落／秋收／午夜陽光／沙漠日落／午夜星空五組可切換，選擇會記住，重開沿用。
 
 ## 上游引用與版權
 
@@ -49,6 +50,6 @@ cargo build --release # 產出 target\release\pdf2md-gui.exe
 
 ## 版本
 
-目前版本：0.12.0。規則：只要有變更，minor 版號就加 0.1。歷次變更見 [CHANGED.md](CHANGED.md)。
+目前版本：0.13.0。規則：只要有變更，minor 版號就加 0.1。歷次變更見 [CHANGED.md](CHANGED.md)。
 
 需求：Windows 10/11（內建 WebView2 即可，不需另外安裝）。
