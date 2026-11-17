@@ -30,7 +30,7 @@ Windows 桌面軟體：把 PDF 轉成 Markdown。底層是 [pdf-inspector](https
 - 轉換核心是 Firecrawl 的 [`pdf-inspector`](https://github.com/firecrawl/pdf-inspector)（建置版本 1.25.2，見 [Cargo.lock](Cargo.lock)），走 crates.io 依賴引入，**沒有**把上游原始碼放進本 repo。
 - CLI 對應做法：界面選項與上游 `pdf2md` 旗標一一對應（`--compact`、`--pages`、`--select-pages`、`--password`、`--detect-only`、`--analyze`），頁碼解析、錯誤訊息與掃描件處理語義都與上游一致；對照關係寫在 `src/convert.rs` 開頭註解。
 - 版權：`pdf-inspector` 採用 MIT 授權（Copyright (c) 2026 Firecrawl，LICENSE 隨 crate 發布）。MIT 允許商用、修改與散布，條件是散布物若包含該軟體須附上版權聲明與授權文字。本 repo 目前只以依賴方式使用、未內含上游程式碼；若日後把上游原始碼 vendoring 進來，必須同時放入它的 LICENSE 全文。
-- 本專案自有程式碼（GUI 殼層、`ui/`、`installer/`、測試）尚未宣告授權條款；公開散布前請先決定（例如一併採用 MIT）並新增 LICENSE 檔案。
+- 本專案自有程式碼（GUI 殼層、`ui/`、`installer/`、測試）採用 MIT 授權（Copyright (c) 2026 Patrick Her），全文見 [LICENSE](LICENSE)。
 
 ## 開發
 
