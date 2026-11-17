@@ -1,26 +1,17 @@
-//! Locks the UI theme to the bittersweet series (shades from
-//! https://colordrop.io/colors/bittersweet): every chromatic color in
-//! `ui/styles.css` must come from the 10-step series; white/black stay
+//! Locks the UI theme to the Urban Sunset palette (from
+//! https://colordrop.io/palette/373): every chromatic color in
+//! `ui/styles.css` must come from the 4-color palette; white/black stay
 //! allowed as neutrals.
 
 use std::path::PathBuf;
 
-/// Shades of bittersweet from https://colordrop.io/colors/bittersweet
-const SERIES_HEX: [&str; 10] = [
-    "ffdad6", "ffb1a9", "fe887b", "fe5f4d", "fe3620", "f41901", "c61501", "981001",
-    "6b0b01", "3d0600",
-];
-const SERIES_RGB: [[u16; 3]; 10] = [
-    [255, 218, 214],
-    [255, 177, 169],
-    [254, 136, 123],
-    [254, 95, 77],
-    [254, 54, 32],
-    [244, 25, 1],
-    [198, 21, 1],
-    [152, 16, 1],
-    [107, 11, 1],
-    [61, 6, 0],
+/// Urban Sunset from https://colordrop.io/palette/373
+const SERIES_HEX: [&str; 4] = ["393939", "ff5a09", "00303f", "7a9d96"];
+const SERIES_RGB: [[u16; 3]; 4] = [
+    [57, 57, 57],
+    [255, 90, 9],
+    [0, 48, 63],
+    [122, 157, 150],
 ];
 
 fn css() -> String {
@@ -83,31 +74,37 @@ fn every_chromatic_color_comes_from_the_brand_series() {
 #[test]
 fn theme_roles_follow_the_series() {
     let css = css().to_lowercase();
-    // Light: near-black red text on white, vivid red accent with white text.
+    // Light: dark-grey text on white, navy accent with white text.
     assert!(
-        css.contains("  --fg: #3d0600"),
-        "light text must be the darkest series step"
+        css.contains("  --fg: #393939"),
+        "light text must be the dark grey"
     );
     assert!(
-        css.contains("  --accent: #f41901"),
-        "light accent must be the vivid red series step"
+        css.contains("  --accent: #00303f"),
+        "light accent must be the navy"
     );
-    // Dark: near-black red page, light red accent with dark text.
+    // Dark: navy page, grey-blue text, grey-blue accent with navy text.
+    assert!(css.contains("  --bg: #00303f"), "dark page must be navy");
     assert!(
-        css.contains("  --bg: #3d0600"),
-        "dark page must be the darkest series step"
-    );
-    assert!(
-        css.contains("  --accent: #fe887b"),
-        "dark accent must be a light red series step"
-    );
-    // Action buttons: one solid color plus a darker pressed state.
-    assert!(
-        css.contains("  --action: #f41901"),
-        "button normal state must be the vivid red series step"
+        css.contains("  --fg: #7a9d96"),
+        "dark text must be the grey-blue"
     );
     assert!(
-        css.contains("  --action-pressed: #c61501"),
-        "button pressed state must be one step darker"
+        css.contains("  --accent: #7a9d96"),
+        "dark accent must be the grey-blue"
+    );
+    // Action buttons: solid orange; pressed state visible on both themes
+    // (navy on light, dark grey on the navy dark page).
+    assert!(
+        css.contains("  --action: #ff5a09"),
+        "button normal state must be the orange"
+    );
+    assert!(
+        css.contains("  --action-pressed: #00303f"),
+        "light pressed state must be navy"
+    );
+    assert!(
+        css.contains("  --action-pressed: #393939"),
+        "dark pressed state must be dark grey"
     );
 }

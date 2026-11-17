@@ -49,6 +49,6 @@ cargo build --release # 產出 target\release\pdf2md-gui.exe
 
 ## 版本
 
-目前版本：0.11.0。規則：只要有變更，minor 版號就加 0.1。歷次變更見 [CHANGED.md](CHANGED.md)。
+目前版本：0.12.0。規則：只要有變更，minor 版號就加 0.1。歷次變更見 [CHANGED.md](CHANGED.md)。
 
 需求：Windows 10/11（內建 WebView2 即可，不需另外安裝）。

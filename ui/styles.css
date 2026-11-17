@@ -1,71 +1,71 @@
-/* Brand series: bittersweet shades (colordrop).
-   Steps: #FFDAD6 #FFB1A9 #FE887B #FE5F4D #FE3620 #F41901 #C61501 #981001 #6B0B01 #3D0600.
-   Every chromatic role below comes from these steps; only white/black
-   (page neutral, button text, text shadow) stand outside the series. */
+/* Brand palette: Urban Sunset (colordrop palette 373).
+   Steps: #393939 #FF5A09 #00303F #7A9D96.
+   Every chromatic role below comes from this palette; only white/black
+   (page neutral, button text, text shadow) stand outside the palette. */
 :root {
   --bg: #ffffff;
-  --fg: #3D0600;
-  --muted: #981001;
-  --border: #FFB1A9;
-  --accent: #F41901;
+  --fg: #393939;
+  --muted: #00303F;
+  --border: #7A9D96;
+  --accent: #00303F;
   --accent-fg: #ffffff;
-  --action: #F41901;
-  --action-pressed: #C61501;
+  --action: #FF5A09;
+  --action-pressed: #00303F;
   --action-fg: #ffffff;
-  --code-bg: rgba(254, 136, 123, 0.16);
-  --notice-bg: rgba(254, 54, 32, 0.12);
-  --notice-fg: #6B0B01;
-  --notice-border: #FE887B;
+  --code-bg: rgba(122, 157, 150, 0.18);
+  --notice-bg: rgba(255, 90, 9, 0.14);
+  --notice-fg: #00303F;
+  --notice-border: #FF5A09;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #3D0600;
-    --fg: #FFDAD6;
-    --muted: #FE887B;
-    --border: #6B0B01;
-    --accent: #FE887B;
-    --accent-fg: #3D0600;
-    --action: #F41901;
-    --action-pressed: #C61501;
+    --bg: #00303F;
+    --fg: #7A9D96;
+    --muted: #FF5A09;
+    --border: #393939;
+    --accent: #7A9D96;
+    --accent-fg: #00303F;
+    --action: #FF5A09;
+    --action-pressed: #393939;
     --action-fg: #ffffff;
-    --code-bg: rgba(254, 95, 77, 0.16);
-    --notice-bg: rgba(254, 54, 32, 0.18);
-    --notice-fg: #FFB1A9;
-    --notice-border: #981001;
+    --code-bg: rgba(255, 90, 9, 0.14);
+    --notice-bg: rgba(255, 90, 9, 0.16);
+    --notice-fg: #FF5A09;
+    --notice-border: #7A9D96;
   }
 }
 
 :root[data-theme="light"] {
   --bg: #ffffff;
-  --fg: #3D0600;
-  --muted: #981001;
-  --border: #FFB1A9;
-  --accent: #F41901;
+  --fg: #393939;
+  --muted: #00303F;
+  --border: #7A9D96;
+  --accent: #00303F;
   --accent-fg: #ffffff;
-  --action: #F41901;
-  --action-pressed: #C61501;
+  --action: #FF5A09;
+  --action-pressed: #00303F;
   --action-fg: #ffffff;
-  --code-bg: rgba(254, 136, 123, 0.16);
-  --notice-bg: rgba(254, 54, 32, 0.12);
-  --notice-fg: #6B0B01;
-  --notice-border: #FE887B;
+  --code-bg: rgba(122, 157, 150, 0.18);
+  --notice-bg: rgba(255, 90, 9, 0.14);
+  --notice-fg: #00303F;
+  --notice-border: #FF5A09;
 }
 
 :root[data-theme="dark"] {
-  --bg: #3D0600;
-  --fg: #FFDAD6;
-  --muted: #FE887B;
-  --border: #6B0B01;
-  --accent: #FE887B;
-  --accent-fg: #3D0600;
-  --action: #F41901;
-  --action-pressed: #C61501;
+  --bg: #00303F;
+  --fg: #7A9D96;
+  --muted: #FF5A09;
+  --border: #393939;
+  --accent: #7A9D96;
+  --accent-fg: #00303F;
+  --action: #FF5A09;
+  --action-pressed: #393939;
   --action-fg: #ffffff;
-  --code-bg: rgba(254, 95, 77, 0.16);
-  --notice-bg: rgba(254, 54, 32, 0.18);
-  --notice-fg: #FFB1A9;
-  --notice-border: #981001;
+  --code-bg: rgba(255, 90, 9, 0.14);
+  --notice-bg: rgba(255, 90, 9, 0.16);
+  --notice-fg: #FF5A09;
+  --notice-border: #7A9D96;
 }
 
 * { box-sizing: border-box; }

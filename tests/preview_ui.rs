@@ -68,7 +68,7 @@ fn preview_copy_and_save_buttons_are_prominent() {
     // Brand action: one solid color, darker while pressed (see CHANGED.md).
     // Hexes live once in `:root`; buttons reference them via variables.
     let root = rule_block(&css, ":root").to_lowercase();
-    for (var, hex) in [("--action", "#f41901"), ("--action-pressed", "#c61501")] {
+    for (var, hex) in [("--action", "#ff5a09"), ("--action-pressed", "#00303f")] {
         assert!(
             root.contains(&format!("{var}: {hex}")),
             ":root must define {var} as {hex}"
