@@ -5,6 +5,9 @@
    white/black stand outside the palettes (page neutral, button text,
    text shadow). */
 :root {
+  color-scheme: light dark;
+  accent-color: #00303F;
+  scrollbar-color: #7A9D96 transparent;
   --bg: #ffffff;
   --fg: #393939;
   --muted: #00303F;
@@ -174,7 +177,45 @@
   --notice-border: #4D638C;
 }
 
+:root[data-theme="light"] { color-scheme: light; }
+:root[data-theme="dark"] { color-scheme: dark; }
+
 * { box-sizing: border-box; }
+
+.visually-hidden {
+  position: absolute !important;
+  clip-path: inset(50%) !important;
+  overflow: hidden !important;
+  width: 1px !important;
+  height: 1px !important;
+  margin: -1px !important;
+  padding: 0 !important;
+  border: 0 !important;
+  white-space: nowrap !important;
+}
+
+.skip-link {
+  position: absolute;
+  left: 8px;
+  top: -48px;
+  z-index: 10;
+  background: var(--accent);
+  color: var(--accent-fg);
+  padding: 8px 14px;
+  border-radius: 6px;
+  text-decoration: none;
+  transition: top 0.15s ease-out;
+}
+
+.skip-link:focus-visible {
+  top: 8px;
+}
+
+:where(a:any-link, button, input, select, [tabindex], [role="button"]):focus-visible {
+  outline: 3px solid var(--action);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
 
 body {
   margin: 0;
@@ -213,13 +254,28 @@ body {
   padding: 3px 10px;
   cursor: pointer;
   font: inherit;
+  min-height: 28px;
+  min-width: 28px;
 }
 
 .theme-switch button.active,
-.tabs button.active {
+.theme-switch button[aria-pressed="true"],
+.tabs button.active,
+.tabs [aria-selected="true"] {
   color: var(--accent-fg);
   background: var(--accent);
   border-color: var(--accent);
+}
+
+.tabs [role="tab"] {
+  position: relative;
+}
+
+.tabs [aria-selected="true"]::after {
+  content: "";
+  position: absolute;
+  inset: auto 8px 2px;
+  border-block-end: 3px solid currentColor;
 }
 
 .theme-switch select {
@@ -260,9 +316,18 @@ section[hidden] { display: none; }
   text-align: center;
   cursor: pointer;
   margin-bottom: 10px;
+  font: inherit;
+  color: inherit;
+  background: transparent;
+  width: 100%;
+  min-height: 64px;
 }
 
-.dropzone.over { border-color: var(--accent); }
+.dropzone.over,
+.dropzone:focus-visible {
+  border-color: var(--accent);
+  border-style: solid;
+}
 .dropzone .filepath { margin-top: 4px; color: var(--muted); word-break: break-all; }
 
 fieldset {
@@ -281,12 +346,22 @@ fieldset input[type="text"],
 fieldset input[type="password"] {
   flex: 1;
   font: inherit;
+  font-size: max(0.95rem, 13px);
   color: var(--fg);
   background: var(--bg);
   border: 1px solid var(--border);
   border-radius: 6px;
-  padding: 4px 8px;
+  padding: 8px 10px;
+  min-height: 32px;
 }
+
+fieldset input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  flex: none;
+}
+
+fieldset label { display: block; margin: 8px 0; line-height: 1.5; }
 
 code { font-family: Consolas, monospace; font-size: 12px; }
 
@@ -396,3 +471,32 @@ button.preview-action {
 
 h2 { font-size: 14px; margin: 4px 0 8px; }
 p, li { line-height: 1.6; }
+
+.status.error {
+  border-inline-start: 3px solid var(--notice-border);
+  padding-inline-start: 8px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@media (forced-colors: active) {
+  .theme-switch button.active,
+  .theme-switch button[aria-pressed="true"],
+  .tabs [aria-selected="true"],
+  button.primary,
+  button.preview-action {
+    forced-color-adjust: none;
+    outline: 2px solid ButtonText;
+  }
+  .tabs [aria-selected="true"]::after {
+    border-block-end-color: Highlight;
+  }
+  :where(a:any-link, button, input, select, [tabindex], [role="button"]):focus-visible {
+    outline: 3px solid Highlight;
+  }
+}

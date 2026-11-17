@@ -128,7 +128,7 @@ async function convert() {
       setStatus('轉換完成：' + state.markdown.length + ' 字元。', false);
       setPreviewStatus('轉換完成：' + state.markdown.length + ' 字元，可複製全文或儲存 .md。', false);
     }
-    switchTab('preview');
+    switchTab('preview', true);
   } catch (err) {
     setStatus('轉換失敗：' + err, true);
   } finally {
@@ -218,13 +218,33 @@ async function saveMarkdown() {
   }
 }
 
-function switchTab(name) {
-  for (const button of document.querySelectorAll('.tabs button')) {
-    button.classList.toggle('active', button.dataset.tab === name);
+const TAB_ORDER = ['upload', 'preview', 'about'];
+
+function switchTab(name, focusTab) {
+  if (!TAB_ORDER.includes(name)) {
+    return;
+  }
+  for (const button of document.querySelectorAll('.tabs [role="tab"]')) {
+    const selected = button.dataset.tab === name;
+    button.classList.toggle('active', selected);
+    button.setAttribute('aria-selected', selected ? 'true' : 'false');
+    button.tabIndex = selected ? 0 : -1;
+    if (selected && focusTab) {
+      button.focus();
+    }
+    if (selected) {
+      button.scrollIntoView({ block: 'nearest', inline: 'nearest', container: 'nearest' });
+    }
   }
   for (const section of document.querySelectorAll('main section')) {
     section.hidden = section.id !== 'tab-' + name;
   }
+}
+
+function focusTabByOffset(current, offset) {
+  const index = TAB_ORDER.indexOf(current);
+  const next = TAB_ORDER[(index + offset + TAB_ORDER.length) % TAB_ORDER.length];
+  switchTab(next, true);
 }
 
 function resolveTheme() {
@@ -238,7 +258,12 @@ function resolveTheme() {
 }
 
 function applyTheme() {
-  document.documentElement.setAttribute('data-theme', resolveTheme());
+  const resolved = resolveTheme();
+  document.documentElement.setAttribute('data-theme', resolved);
+  const meta = document.querySelector('meta[name="color-scheme"]');
+  if (meta) {
+    meta.content = state.themeChoice === 'auto' ? 'light dark' : state.themeChoice;
+  }
 }
 
 function loadStored(key) {
@@ -258,11 +283,17 @@ function store(key, value) {
 }
 
 function setThemeChoice(choice) {
-  state.themeChoice = choice;
-  store('pdf2md.theme', choice);
+  state.themeChoice = choice === 'dark' || choice === 'light' ? choice : 'auto';
+  if (state.themeChoice === 'auto') {
+    try { localStorage.removeItem('pdf2md.theme'); } catch (ignored) {}
+  } else {
+    store('pdf2md.theme', state.themeChoice);
+  }
   applyTheme();
   for (const button of document.querySelectorAll('.theme-switch button')) {
-    button.classList.toggle('active', button.dataset.themeChoice === choice);
+    const active = button.dataset.themeChoice === state.themeChoice;
+    button.classList.toggle('active', active);
+    button.setAttribute('aria-pressed', active ? 'true' : 'false');
   }
 }
 
@@ -280,8 +311,21 @@ function setSchemeChoice(scheme) {
 }
 
 function bindEvents() {
-  for (const button of document.querySelectorAll('.tabs button')) {
-    button.addEventListener('click', () => switchTab(button.dataset.tab));
+  for (const button of document.querySelectorAll('.tabs [role="tab"]')) {
+    button.addEventListener('click', () => switchTab(button.dataset.tab, false));
+    button.addEventListener('keydown', (event) => {
+      const key = event.key;
+      if (key === 'ArrowRight' || key === 'ArrowLeft' || key === 'Home' || key === 'End') {
+        event.preventDefault();
+        if (key === 'Home') {
+          switchTab(TAB_ORDER[0], true);
+        } else if (key === 'End') {
+          switchTab(TAB_ORDER[TAB_ORDER.length - 1], true);
+        } else {
+          focusTabByOffset(button.dataset.tab, key === 'ArrowRight' ? 1 : -1);
+        }
+      }
+    });
   }
   for (const button of document.querySelectorAll('.theme-switch button')) {
     button.addEventListener('click', () => setThemeChoice(button.dataset.themeChoice));
@@ -290,7 +334,14 @@ function bindEvents() {
     setSchemeChoice(event.target.value);
   });
   window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', applyTheme);
-  $('dropzone').addEventListener('click', pickPdf);
+  const zone = $('dropzone');
+  zone.addEventListener('click', pickPdf);
+  zone.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      pickPdf();
+    }
+  });
   $('btnConvert').addEventListener('click', convert);
   $('btnCopyCmd').addEventListener('click', async () => {
     const ok = await copyText($('cliPreview').textContent);
@@ -309,13 +360,25 @@ function bindEvents() {
     $(id).addEventListener('input', refreshCliPreview);
   }
   // Cosmetic drag-over highlight only; file data arrives via backend events.
-  const zone = $('dropzone');
   zone.addEventListener('dragenter', (e) => { e.preventDefault(); zone.classList.add('over'); });
   zone.addEventListener('dragover', (e) => { e.preventDefault(); });
   zone.addEventListener('dragleave', () => zone.classList.remove('over'));
   zone.addEventListener('drop', (e) => {
     e.preventDefault();
     zone.classList.remove('over');
+  });
+  for (const panel of document.querySelectorAll('main section[data-panel]')) {
+    panel.addEventListener('beforematch', () => {
+      switchTab(panel.dataset.panel, true);
+    });
+  }
+  window.addEventListener('storage', (event) => {
+    if (event.key === 'pdf2md.theme') {
+      setThemeChoice(event.newValue || 'auto');
+    }
+    if (event.key === 'pdf2md.scheme') {
+      setSchemeChoice(event.newValue || 'sunset');
+    }
   });
 }
 

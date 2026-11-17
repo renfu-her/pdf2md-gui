@@ -3,13 +3,25 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light dark">
 <title>PDF 轉 Markdown</title>
+<script>
+try {
+  var t = localStorage.getItem("pdf2md.theme") || "auto";
+  var s = localStorage.getItem("pdf2md.scheme") || "sunset";
+  var r = t === "dark" ? "dark" : t === "light" ? "light" : (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+  document.documentElement.setAttribute("data-theme", r);
+  document.documentElement.setAttribute("data-scheme", s);
+} catch (e) {}
+</script>
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+<a class="skip-link" href="#main">跳到主內容</a>
 <header class="topbar">
-  <div class="title">PDF 轉 Markdown <span id="appVersion" class="version"></span></div>
+  <h1 class="title">PDF 轉 Markdown <span id="appVersion" class="version"></span></h1>
   <div class="theme-switch" role="group" aria-label="主題">
+    <label class="visually-hidden" for="schemeSelect">配色</label>
     <select id="schemeSelect" aria-label="配色">
       <option value="sunset">都會日落</option>
       <option value="harvest">秋收</option>
@@ -17,63 +29,64 @@
       <option value="desert">沙漠日落</option>
       <option value="sky">午夜星空</option>
     </select>
-    <button type="button" data-theme-choice="light">淺色</button>
-    <button type="button" data-theme-choice="dark">深色</button>
-    <button type="button" data-theme-choice="auto" class="active">自動</button>
+    <button type="button" data-theme-choice="light" aria-pressed="false">淺色</button>
+    <button type="button" data-theme-choice="dark" aria-pressed="false">深色</button>
+    <button type="button" data-theme-choice="auto" class="active" aria-pressed="true">自動</button>
   </div>
 </header>
 
 <nav class="tabs" role="tablist" aria-label="功能頁籤">
-  <button type="button" role="tab" data-tab="upload" class="active">上傳</button>
-  <button type="button" role="tab" data-tab="preview">預覽</button>
-  <button type="button" role="tab" data-tab="about">關於</button>
+  <button type="button" role="tab" id="tabbtn-upload" aria-selected="true" data-tab="upload" class="active">上傳</button>
+  <button type="button" role="tab" id="tabbtn-preview" aria-selected="false" data-tab="preview" tabindex="-1">預覽</button>
+  <button type="button" role="tab" id="tabbtn-about" aria-selected="false" data-tab="about" tabindex="-1">關於</button>
 </nav>
 
-<main>
-  <section id="tab-upload" role="tabpanel">
-    <div id="dropzone" class="dropzone" title="點擊選擇，或把 PDF 拖進視窗">
+<main id="main">
+  <section id="tab-upload" role="tabpanel" aria-labelledby="tabbtn-upload" data-panel="upload">
+    <div id="dropzone" class="dropzone" role="button" tabindex="0" aria-label="選擇 PDF 檔案" aria-describedby="dropHint filePath" title="點擊選擇，或把 PDF 拖進視窗">
       <div id="dropHint">點擊選擇 PDF，或把檔案拖進視窗</div>
       <div id="filePath" class="filepath"></div>
     </div>
 
     <fieldset>
       <legend>轉換選項（對應 CLI 旗標）</legend>
-      <label><input type="checkbox" id="optCompact"> <code>--compact</code> 緊湊輸出</label>
-      <label><input type="checkbox" id="optPages"> <code>--pages</code> 頁面分隔標記</label>
-      <label><input type="checkbox" id="optDetect"> <code>--detect-only</code> 僅偵測</label>
-      <label><input type="checkbox" id="optAnalyze"> <code>--analyze</code> 版面分析</label>
-      <label class="row"><span><code>--select-pages</code></span>
-        <input type="text" id="optPageSpec" placeholder="例：1,3,5-10（留白=全部）"></label>
-      <label class="row"><span><code>--password</code></span>
-        <input type="password" id="optPassword" placeholder="加密 PDF 才需要填"></label>
-      <label class="row"><span>輸出 .md</span>
-        <input type="text" id="optOutput" placeholder="留白=只預覽"></label>
+      <label for="optCompact"><input type="checkbox" id="optCompact" name="compact"> <code>--compact</code> 緊湊輸出</label>
+      <label for="optPages"><input type="checkbox" id="optPages" name="pages"> <code>--pages</code> 頁面分隔標記</label>
+      <label for="optDetect"><input type="checkbox" id="optDetect" name="detect-only"> <code>--detect-only</code> 僅偵測</label>
+      <label for="optAnalyze"><input type="checkbox" id="optAnalyze" name="analyze"> <code>--analyze</code> 版面分析</label>
+      <label class="row" for="optPageSpec"><span><code>--select-pages</code></span>
+        <input type="text" id="optPageSpec" name="select-pages" placeholder="例：1,3,5-10（留白=全部）" autocomplete="off" autocapitalize="none" spellcheck="false" inputmode="numeric" enterkeyhint="next" aria-describedby="pageSpecHint">
+        <span id="pageSpecHint" class="visually-hidden">頁碼範圍，留白表示全部頁面</span></label>
+      <label class="row" for="optPassword"><span><code>--password</code></span>
+        <input type="password" id="optPassword" name="password" placeholder="加密 PDF 才需要填" autocomplete="off" enterkeyhint="next"></label>
+      <label class="row" for="optOutput"><span>輸出 .md</span>
+        <input type="text" id="optOutput" name="output" placeholder="留白=只預覽" autocomplete="off" autocapitalize="none" spellcheck="false" enterkeyhint="done"></label>
     </fieldset>
 
     <div class="cli-row">
       <span>對等 CLI 指令：</span>
       <button type="button" id="btnCopyCmd">複製指令</button>
     </div>
-    <pre id="cliPreview" class="code">pdf2md &lt;請先選擇 PDF&gt;</pre>
+    <pre id="cliPreview" class="code" aria-label="對等 CLI 指令預覽">pdf2md &lt;請先選擇 PDF&gt;</pre>
 
-    <button type="button" id="btnConvert" class="primary" disabled>開始轉換</button>
+    <button type="button" id="btnConvert" class="primary" disabled aria-describedby="dropHint">開始轉換</button>
     <div id="status" class="status" role="status"></div>
   </section>
 
-  <section id="tab-preview" role="tabpanel" hidden>
+  <section id="tab-preview" role="tabpanel" aria-labelledby="tabbtn-preview" data-panel="preview" hidden>
     <div id="ocrNotice" class="notice" hidden>需要 OCR：此 PDF 無可用文字層，請改用 OCR 流程。</div>
-    <dl id="report" class="report"></dl>
+    <dl id="report" class="report" aria-label="轉換報告"></dl>
     <div class="preview-actions">
-      <span class="preview-label">Markdown 預覽：</span>
-      <button type="button" id="btnCopyMd" class="preview-action">複製全文</button>
-      <button type="button" id="btnSaveMd" class="preview-action">儲存 .md…</button>
+      <span class="preview-label" id="previewLabel">Markdown 預覽：</span>
+      <button type="button" id="btnCopyMd" class="preview-action" aria-describedby="previewLabel">複製全文</button>
+      <button type="button" id="btnSaveMd" class="preview-action" aria-describedby="previewLabel">儲存 .md…</button>
     </div>
     <div id="savePath" class="savepath">尚未儲存：轉換後按「儲存 .md…」會寫到此位置</div>
-    <pre id="markdown" class="code markdown"></pre>
+    <pre id="markdown" class="code markdown" tabindex="0" aria-label="Markdown 轉換結果"></pre>
     <div id="previewStatus" class="status" role="status"></div>
   </section>
 
-  <section id="tab-about" role="tabpanel" hidden>
+  <section id="tab-about" role="tabpanel" aria-labelledby="tabbtn-about" data-panel="about" hidden>
     <h2>關於</h2>
     <p><strong>PDF 轉 Markdown</strong> <span id="aboutVersion"></span></p>
     <p>把 PDF 轉成 Markdown 的 Windows 桌面軟體。底層是 Rust 製的
